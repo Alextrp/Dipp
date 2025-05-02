@@ -1,0 +1,193 @@
+﻿@page
+@model IndexModel
+
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<!-- Hero Section -->
+<section class="bg-primary bg-gradient text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">Надежные железнодорожные грузоперевозки</h1>
+                <p class="lead mb-4">Доставляем ваши грузы быстро, безопасно и по выгодным ценам по всей стране</p>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <a href="/Calculate" class="btn btn-warning btn-lg text-dark">Рассчитать стоимость</a>
+                    <a href="/About" class="btn btn-outline-light btn-lg">Узнать больше</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="~/images/railway-freight.jpg" alt="Железнодорожные перевозки" class="img-fluid rounded shadow" style="max-height: 400px;">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Company Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">О нашей компании</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Мы специализируемся на железнодорожных грузоперевозках более 15 лет. Наша компания предлагает полный
+                спектр логистических услуг, обеспечивая надежную и своевременную доставку грузов по всей территории
+                страны.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex mb-3">
+                            <i class="bi bi-graph-up text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Опыт и надежность</h3>
+                        <p class="text-muted">Более 15 лет успешной работы и тысячи довольных клиентов</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex mb-3">
+                            <i class="bi bi-geo-alt text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Широкая география</h3>
+                        <p class="text-muted">Доставляем грузы по всей стране и в международном сообщении</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle d-inline-flex mb-3">
+                            <i class="bi bi-clock text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h3 class="h4 mb-3">Точность в сроках</h3>
+                        <p class="text-muted">Гарантируем своевременную доставку вашего груза</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Наши услуги</h2>
+            <p class="lead text-muted mx-auto" style="max-width: 700px;">
+                Мы предлагаем полный комплекс услуг по железнодорожным грузоперевозкам
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-train-front text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h3 class="h5 mb-2">Контейнерные перевозки</h3>
+                        <p class="text-muted">Перевозка грузов в контейнерах различных типов и размеров</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-box-seam text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h3 class="h5 mb-2">Перевозка сборных грузов</h3>
+                        <p class="text-muted">Экономичная доставка небольших партий грузов</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-calculator text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h3 class="h5 mb-2">Расчет стоимости</h3>
+                        <p class="text-muted">Индивидуальный расчет стоимости перевозки для вашего груза</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-geo-alt text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h3 class="h5 mb-2">Отслеживание груза</h3>
+                        <p class="text-muted">Мониторинг местоположения вашего груза в режиме реального времени</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-shield-check text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h3 class="h5 mb-2">Страхование грузов</h3>
+                        <p class="text-muted">Полное или частичное страхование перевозимых грузов</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4">
+                <div class="d-flex">
+                    <div class="flex-shrink-0">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle">
+                            <i class="bi bi-clock-history text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="ms-3">
+                        <h3 class="h5 mb-2">Экспресс-доставка</h3>
+                        <p class="text-muted">Ускоренная доставка срочных грузов по приоритетным маршрутам</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/Services" class="btn btn-primary btn-lg">Все услуги</a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-primary py-5 text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-3">Готовы начать сотрудничество?</h2>
+        <p class="lead mb-4 mx-auto" style="max-width: 700px;">
+            Свяжитесь с нами сегодня, чтобы получить индивидуальное предложение по грузоперевозкам для вашего бизнеса
+        </p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+            <a href="/Calculate" class="btn btn-warning btn-lg text-dark">Рассчитать стоимость</a>
+            <a href="/Contact" class="btn btn-outline-light btn-lg">Связаться с нами</a>
+        </div>
+    </div>
+</section>
