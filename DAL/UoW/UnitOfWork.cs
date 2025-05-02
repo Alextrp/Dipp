@@ -15,8 +15,8 @@ namespace DAL.UoW
         public UnitOfWork(RailwayDbContext context)
         {
             _context = context;
-            Users = new Repository<User>(_context);
-            Roles = new Repository<Role>(_context);
+            Users = new UserRepository(_context);
+            Roles = new RoleRepository(_context);
             Stations = new Repository<Station>(_context);
             Segments = new Repository<Segment>(_context);
             Cargoes = new Repository<Cargo>(_context);
@@ -30,8 +30,8 @@ namespace DAL.UoW
             DowntimeCosts = new Repository<DowntimeCost>(_context);
         }
 
-        public IRepository<User> Users { get; }
-        public IRepository<Role> Roles { get; }
+        public IUserRepository Users { get; }
+        public IRoleRepository Roles { get; }
         public IRepository<Station> Stations { get; }
         public IRepository<Segment> Segments { get; }
         public IRepository<Cargo> Cargoes { get; }

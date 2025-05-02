@@ -10,8 +10,8 @@ namespace DAL.UoW
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<User> Users { get; }
-        IRepository<Role> Roles { get; }
+        IUserRepository Users { get; }
+        IRoleRepository Roles { get; }
         IRepository<Station> Stations { get; }
         IRepository<Segment> Segments { get; }
         IRepository<Cargo> Cargoes { get; }

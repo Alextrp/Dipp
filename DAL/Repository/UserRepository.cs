@@ -8,47 +8,51 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class UserRepository: IUserRepository
     {
         private readonly RailwayDbContext _context;
-        private readonly DbSet<T> _dbSet;
+        private readonly DbSet<User> _dbSet;
 
-        public Repository(RailwayDbContext context)
+        public UserRepository(RailwayDbContext context)
         {
             _context = context;
-            _dbSet = context.Set<T>();
+            _dbSet = context.Set<User>();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public async Task AddAsync(T entity)
+        public async Task AddAsync(User entity)
         {
             await _dbSet.AddAsync(entity);
         }
 
-        public void Update(T entity)
+        public void Update(User entity)
         {
             _dbSet.Update(entity);
         }
 
-        public void Delete(T entity)
+        public void Delete(User entity)
         {
             _dbSet.Remove(entity);
         }
 
+        public async Task<User?> GetByLoginAsync(string login)
+        {
+            return await _dbSet
+                .FirstOrDefaultAsync(e => EF.Property<string>(e, "Login") == login);
+        }
 
         public async Task SaveAsync()
         {
             await _context.SaveChangesAsync();
         }
     }
-
 }

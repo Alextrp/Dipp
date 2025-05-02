@@ -34,6 +34,7 @@
                     <div class="d-flex">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <p class="btn align-items-center text-dark mb-0 me-3 text-primary">@User.Identity.Name</p>
                             <form method="post" action="/Account/Logout">
                                 <button type="submit" class="btn btn-link text-dark text-decoration-none">Выход</button>
                             </form>
@@ -132,6 +133,11 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+    }
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
