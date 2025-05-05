@@ -47,7 +47,15 @@ namespace DAL.Repository
         public async Task<User?> GetByLoginAsync(string login)
         {
             return await _dbSet
+                .Include(u => u.Role)
                 .FirstOrDefaultAsync(e => EF.Property<string>(e, "Login") == login);
+        }
+
+        public async Task<IEnumerable<User>> GetAllWithRoleAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Role)
+                .ToListAsync();
         }
 
         public async Task SaveAsync()

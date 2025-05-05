@@ -1,4 +1,5 @@
-﻿using BLL.DTOs;
+﻿using AutoMapper;
+using BLL.DTOs;
 using DAL.Models;
 using DAL.UoW;
 using Microsoft.AspNetCore.Identity;
@@ -9,10 +10,12 @@ namespace BLL.AccountService
     {
         private readonly IUnitOfWork _uow;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly IMapper _mapper;
 
-        public AccountService(IUnitOfWork uow)
+        public AccountService(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
+            _mapper = mapper;
             _passwordHasher = new PasswordHasher<User>();
         }
 
@@ -22,19 +25,16 @@ namespace BLL.AccountService
             if (existing.Any(u => u.Login == dto.Login || u.Email == dto.Email))
                 return false;
 
-            
-            var roleId = await _uow.Roles.GetRoleIdByNameAsync("Грузоотправитель");
+            var roleId = await _uow.Roles.GetRoleIdByNameAsync("Администратор");
             if (roleId == null)
                 throw new Exception("Роль 'Грузоотправитель' не найдена");
 
-            var user = new User
-            {
-                FullName = dto.FullName,
-                Login = dto.Login,
-                Email = dto.Email,
-                Phone = dto.Phone,
-                RoleId = roleId.Value
-            };
+            // Маппим RegisterDTO в User с помощью AutoMapper
+            var user = _mapper.Map<User>(dto);
+
+            // Присваиваем роль
+            user.RoleId = roleId.Value;
+            user.Role = null;
 
             // Хеширование пароля
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);

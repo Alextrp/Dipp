@@ -12,11 +12,11 @@ namespace DAL.UoW
     {
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
+        ISegmentRepository Segments { get; }
         IRepository<Station> Stations { get; }
-        IRepository<Segment> Segments { get; }
         IRepository<Cargo> Cargoes { get; }
         IRepository<CargoType> CargoTypes { get; }
-        IRepository<Request> Requests { get; }
+        IRequestRepository Requests { get; }
         IRepository<Route> Routes { get; }
         IRepository<RouteSegment> RouteSegments { get; }
         IRepository<Payment> Payments { get; }

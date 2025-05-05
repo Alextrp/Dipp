@@ -1,0 +1,40 @@
+﻿@page
+@model Dipp.Pages.MyRequestsModel
+@{
+    ViewData["Title"] = "Мои заявки";
+}
+
+<h2>Мои заявки</h2>
+
+@if (Model.Requests.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Груз</th>
+                <th>Маршрут</th>
+                <th>Дата</th>
+                <th>Стоимость</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var request in Model.Requests)
+        {
+            <tr>
+                <td>@request.RequestId</td>
+                <td>@request.CargoName</td>
+                <td>@request.RouteName</td>
+                <td>@request.RequestDate.ToShortDateString()</td>
+                <td>@(request.Cost?.ToString("0.00") ?? "—")</td>
+                <td>@(request.PaymentStatus ?? "—")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>У вас нет заявок.</p>
+}

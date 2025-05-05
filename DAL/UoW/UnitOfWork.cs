@@ -18,10 +18,10 @@ namespace DAL.UoW
             Users = new UserRepository(_context);
             Roles = new RoleRepository(_context);
             Stations = new Repository<Station>(_context);
-            Segments = new Repository<Segment>(_context);
+            Segments = new SegmentRepository(_context);
             Cargoes = new Repository<Cargo>(_context);
             CargoTypes = new Repository<CargoType>(_context);
-            Requests = new Repository<Request>(_context);
+            Requests = new RequestRepository(_context);
             Routes = new Repository<Route>(_context);
             RouteSegments = new Repository<RouteSegment>(_context);
             Payments = new Repository<Payment>(_context);
@@ -33,10 +33,10 @@ namespace DAL.UoW
         public IUserRepository Users { get; }
         public IRoleRepository Roles { get; }
         public IRepository<Station> Stations { get; }
-        public IRepository<Segment> Segments { get; }
+        public ISegmentRepository Segments { get; }
         public IRepository<Cargo> Cargoes { get; }
         public IRepository<CargoType> CargoTypes { get; }
-        public IRepository<Request> Requests { get; }
+        public IRequestRepository Requests { get; }
         public IRepository<Route> Routes { get; }
         public IRepository<RouteSegment> RouteSegments { get; }
         public IRepository<Payment> Payments { get; }

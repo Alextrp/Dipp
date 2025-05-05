@@ -37,6 +37,7 @@ namespace Dipp.Pages.Account
                 return Page();
 
             var user = await _accountService.AuthenticateAsync(Input.Username, Input.Password);
+            
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Неверный логин или пароль.");
@@ -54,6 +55,11 @@ namespace Dipp.Pages.Account
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            if (user.Role?.RoleName == "Администратор")
+            {
+                return RedirectToPage("/Admin/Index");
+            }
 
             return RedirectToPage("/Index");
         }

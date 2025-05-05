@@ -25,18 +25,19 @@
                             <a class="nav-link" href="/">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/Calculate">Рассчитать стоимость</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Orders">Мои заказы</a>
+                            <a class="nav-link" href="/CalculateCost">Рассчитать стоимость</a>
                         </li>
                     </ul>
                     <div class="d-flex">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            if (User.IsInRole("Грузоотправитель"))
+                            {
+                                <a class="nav-link" href="/MyRequests">Мои заказы</a>
+                            }
                             <p class="btn align-items-center text-dark mb-0 me-3 text-primary">@User.Identity.Name</p>
-                            <form method="post" action="/Account/Logout">
-                                <button type="submit" class="btn btn-link text-dark text-decoration-none">Выход</button>
+                            <form asp-page="/Account/Logout" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-link">Выйти</button>
                             </form>
                         }
                         else
@@ -86,7 +87,7 @@
                         <li class="mb-2"><a href="/" class="text-secondary text-decoration-none hover-text-white">Главная</a></li>
                         <li class="mb-2"><a href="/About" class="text-secondary text-decoration-none hover-text-white">О компании</a></li>
                         <li class="mb-2"><a href="/Services" class="text-secondary text-decoration-none hover-text-white">Услуги</a></li>
-                        <li class="mb-2"><a href="/Calculate" class="text-secondary text-decoration-none hover-text-white">Рассчитать стоимость</a></li>
+                        <li class="mb-2"><a href="/CalculateCost" class="text-secondary text-decoration-none hover-text-white">Рассчитать стоимость</a></li>
                         <li class="mb-2"><a href="/Orders" class="text-secondary text-decoration-none hover-text-white">Мои заказы</a></li>
                         <li class="mb-2"><a href="/Contact" class="text-secondary text-decoration-none hover-text-white">Контакты</a></li>
                     </ul>

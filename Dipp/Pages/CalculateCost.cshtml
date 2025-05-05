@@ -1,0 +1,72 @@
+﻿@page
+@model Dipp.Pages.CalculateCostModel
+
+@{
+    ViewData["Title"] = "Расчёт стоимости перевозки";
+}
+
+<h2>Расчёт стоимости перевозки</h2>
+
+<form method="post" class="form-horizontal">
+    <div class="form-group">
+        <label asp-for="Input.FromStationId">Станция отправления</label>
+        <select asp-for="Input.FromStationId" asp-items="@(new SelectList(Model.Stations, "StationId", "StationName"))" class="form-control"></select>
+        <span asp-validation-for="Input.FromStationId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.ToStationId">Станция назначения</label>
+        <select asp-for="Input.ToStationId" asp-items="@(new SelectList(Model.Stations, "StationId", "StationName"))" class="form-control"></select>
+        <span asp-validation-for="Input.ToStationId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.CargoTypeId">Тип груза</label>
+        <select asp-for="Input.CargoTypeId" asp-items="@(new SelectList(Model.CargoTypes, "CargoTypeId", "TypeName"))" class="form-control"></select>
+        <span asp-validation-for="Input.CargoTypeId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.CargoName">Название груза</label>
+        <input asp-for="Input.CargoName" class="form-control" />
+        <span asp-validation-for="Input.CargoName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.WeightKg">Вес (в кг)</label>
+        <input asp-for="Input.WeightKg" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="Input.WeightKg" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Input.AdditionalInfo">Дополнительная информация</label>
+        <textarea asp-for="Input.AdditionalInfo" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" name="action" value="calculate" class="btn btn-primary">Рассчитать</button>
+
+    @if (User.Identity?.IsAuthenticated == true && Model.Input.CalculatedCost.HasValue)
+    {
+        <button type="submit" name="action" value="submit" class="btn btn-success ml-2">Оформить заявку</button>
+    }
+</form>
+
+<hr />
+
+@if (Model.Input.CalculatedCost.HasValue)
+{
+    <div class="alert alert-info">
+        <strong>Стоимость перевозки:</strong> @Model.Input.CalculatedCost.Value.ToString("0.00") BYN
+    </div>
+
+    @if (Model.Input.OrderCreated)
+    {
+        <div class="alert alert-success">
+            Заявка успешно оформлена и отправлена на рассмотрение.
+        </div>
+    }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

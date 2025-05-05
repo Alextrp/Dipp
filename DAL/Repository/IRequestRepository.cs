@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public interface IUserRepository: IRepository<User>
+    public interface IRequestRepository: IRepository<Request>
     {
-        Task<User?> GetByLoginAsync(string login);
-        Task<IEnumerable<User>> GetAllWithRoleAsync();
+        Task<List<Request>> GetRequestsWithDetailsByUserIdAsync(int userId);
     }
 }
