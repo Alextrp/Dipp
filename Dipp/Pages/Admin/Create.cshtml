@@ -56,12 +56,11 @@
                         </div>
                     </div>
 
-                    <!-- Пароль -->
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input asp-for="plainPassword" class="form-control" type="password" placeholder="Пароль" />
-                            <label asp-for="plainPassword" class="form-label">Пароль</label>
-                            <span asp-validation-for="plainPassword" class="text-danger"></span>
+                            <input asp-for="NewUser.PlainPassword" class="form-control" type="password" placeholder="Пароль" />
+                            <label asp-for="NewUser.PlainPassword" class="form-label">Пароль</label>
+                            <span asp-validation-for="NewUser.PlainPassword" class="text-danger"></span>
                         </div>
                     </div>
 

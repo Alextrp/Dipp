@@ -39,6 +39,7 @@ namespace BLL.AdminService
         public async Task AddUserAsync(UserDTO dto, string plainPassword)
         {
             var user = _mapper.Map<User>(dto);
+            user.RoleId = (int)await _unitOfWork.Roles.GetRoleIdByNameAsync(dto.Role);
             user.PasswordHash = _passwordHasher.HashPassword(user, plainPassword);
             await _unitOfWork.Users.AddAsync(user);
             await _unitOfWork.SaveAsync();

@@ -1,8 +1,10 @@
 using BLL;
 using BLL.AccountService;
 using BLL.AdminService;
+using BLL.ManagerService;
 using BLL.RequestService;
 using BLL.RouteBuilderService;
+using BLL.RouteOptimizerService;
 using DAL.Models;
 using DAL.Repository;
 using DAL.UoW;
@@ -30,6 +32,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IRouteBuilderService, RouteBuilderService>();
 builder.Services.AddScoped<IRequestService, RequestService>();
+builder.Services.AddScoped<IRouteOptimizerService, RouteOptimizerService>();
+builder.Services.AddScoped<IManagerService, ManagerService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

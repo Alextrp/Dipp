@@ -19,8 +19,12 @@ namespace BLL
                 .ReverseMap(); // Двухсторонний маппинг
 
             CreateMap<User, UserDTO>()
-                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.RoleName))
-                .ReverseMap(); // Двухсторонний маппинг
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.RoleName));
+            // Двухсторонний маппинг
+
+            CreateMap<UserDTO, User>()
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
 
             // Маппинг для Role
             CreateMap<Role, RoleDTO>()

@@ -16,13 +16,12 @@ namespace Dipp.Pages.Admin
 
         [BindProperty]
         public UserDTO NewUser { get; set; } = new();
-        public string plainPassword { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
                 return Page();
 
-            await _adminService.AddUserAsync(NewUser, plainPassword);
+            await _adminService.AddUserAsync(NewUser, NewUser.PlainPassword);
             return RedirectToPage("./Index");
         }
     }

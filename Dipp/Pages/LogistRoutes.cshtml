@@ -1,0 +1,329 @@
+﻿@page
+@model Dipp.Pages.LogistRoutesModel
+@{
+    ViewData["Title"] = "Управление маршрутами";
+}
+
+<div class="container-fluid py-4">
+    <!-- Заголовок страницы -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary mb-1">
+                <i class="bi bi-truck me-2"></i>Управление маршрутами
+            </h2>
+            <p class="text-muted">Просмотр заявок и оптимизация маршрутов перевозки</p>
+        </div>
+        <form method="post" asp-page-handler="Calculate">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-graph-up-arrow me-2"></i>Рассчитать оптимальный маршрут
+            </button>
+        </form>
+    </div>
+
+    <!-- Карточка с таблицей заявок -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-list-check me-2"></i>Список заявок
+                </h5>
+                <div class="input-group" style="width: 300px;">
+                    <span class="input-group-text bg-white border-end-0">
+                        <i class="bi bi-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0" id="searchRequests"
+                           placeholder="Поиск заявок..." aria-label="Поиск заявок">
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-4">ID</th>
+                            <th scope="col">Откуда</th>
+                            <th scope="col">Куда</th>
+                            <th scope="col">Груз</th>
+                            <th scope="col">Масса (кг)</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col" class="text-end pe-4">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var req in Model.AllRequests)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-medium">@req.RequestId</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="station-icon me-2">
+                                            <i class="bi bi-geo-alt text-primary"></i>
+                                        </div>
+                                        <span>@req.Route.StartStation</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="station-icon me-2">
+                                            <i class="bi bi-geo-alt-fill text-danger"></i>
+                                        </div>
+                                        <span>@req.Route.EndStation</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="cargo-icon me-2">
+                                            <i class="bi bi-box-seam text-secondary"></i>
+                                        </div>
+                                        <span>@req.Cargo.CargoType</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-medium">@req.Cargo.WeightKg</span>
+                                </td>
+                                <td>
+                                    @{
+                                        string badgeClass = req.Status switch
+                                        {
+                                            "Ожидает" => "bg-warning",
+                                            "В обработке" => "bg-info",
+                                            "Подтвержден" => "bg-success",
+                                            "Отклонен" => "bg-danger",
+                                            _ => "bg-secondary"
+                                        };
+                                        string statusIcon = req.Status switch
+                                        {
+                                            "Ожидает" => "bi-hourglass-split",
+                                            "В обработке" => "bi-arrow-repeat",
+                                            "Подтвержден" => "bi-check-circle-fill",
+                                            "Отклонен" => "bi-x-circle-fill",
+                                            _ => "bi-question-circle"
+                                        };
+                                    }
+                                    <span class="badge @badgeClass">
+                                        <i class="bi @statusIcon me-1"></i>
+                                        @req.Status
+                                    </span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group">
+                                        <a href="#" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                    Всего заявок: <span class="fw-bold">@Model.AllRequests.Where(a => a.Status != "Ждет добавления в расписание").Count()</span>
+                </div>
+                <nav aria-label="Навигация по страницам">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Предыдущая</a>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Следующая</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Оптимальный маршрут -->
+    @if (Model.OptimizedRoute != null)
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3">
+                <h5 class="mb-0 text-success">
+                    <i class="bi bi-graph-up-arrow me-2"></i>Оптимальный маршрут
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Визуализация маршрута -->
+                        <div class="route-visualization mb-4">
+                            <div class="d-flex flex-wrap align-items-center">
+                                @{
+                                    var stations = Model.OptimizedRoute.RouteStations.ToList();
+                                    for (int i = 0; i < stations.Count; i++)
+                                    {
+                                        var station = stations[i];
+                                        <div class="station-node @(i == 0 ? "start-station" : i == stations.Count - 1 ? "end-station" : "")">
+                                            <div class="station-dot @(i == 0 ? "bg-primary" : i == stations.Count - 1 ? "bg-success" : "bg-info")"></div>
+                                            <div class="station-name">@station.StationName</div>
+                                        </div>
+
+                                        @if (i < stations.Count - 1)
+                                        {
+                                            <div class="route-line"></div>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Детали маршрута -->
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="card bg-light border-0 h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-2">
+                                            <i class="bi bi-signpost-2 text-primary fs-3"></i>
+                                        </div>
+                                        <h6 class="card-title">Количество станций</h6>
+                                        <h3 class="mb-0">@Model.OptimizedRoute.RouteStations.Count()</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light border-0 h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-2">
+                                            <i class="bi bi-box-seam text-primary fs-3"></i>
+                                        </div>
+                                        <h6 class="card-title">Количество заявок</h6>
+                                        <h3 class="mb-0">@Model.OptimizedRoute.RequestsInRoute.Count</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light border-0 h-100">
+                                    <div class="card-body text-center">
+                                        <div class="mb-2">
+                                            <i class="bi bi-map text-primary fs-3"></i>
+                                        </div>
+                                        <h6 class="card-title">Общая дистанция</h6>
+                                        <h3 class="mb-0">@Model.OptimizedRoute.TotalDistance км</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Информация о маршруте и кнопка подтверждения -->
+                        <div class="card bg-light border-0 mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Информация о маршруте</h5>
+
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                                        <span>Начальная станция:</span>
+                                        <span class="fw-medium">@Model.OptimizedRoute.RouteStations.First().StationName</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                                        <span>Конечная станция:</span>
+                                        <span class="fw-medium">@Model.OptimizedRoute.RouteStations.Last().StationName</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                                        <span>Промежуточных станций:</span>
+                                        <span class="fw-medium">@(Model.OptimizedRoute.RouteStations.Count() - 2)</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent">
+                                        <span>Общее время в пути:</span>
+                                        <span class="fw-medium">~@(Math.Round(Model.OptimizedRoute.TotalDistance / 60.0, 1)) ч</span>
+                                    </li>
+                                </ul>
+
+                                <form method="post" asp-page-handler="Confirm">
+                                    <button type="submit" class="btn btn-success w-100">
+                                        <i class="bi bi-check-circle me-2"></i>Подтвердить маршрут
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    /* Стили для визуализации маршрута */
+    .route-visualization {
+        margin: 20px 0;
+        overflow-x: auto;
+    }
+
+    .station-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 100px;
+    }
+
+    .station-dot {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-bottom: 5px;
+    }
+
+    .start-station .station-dot {
+        width: 24px;
+        height: 24px;
+    }
+
+    .end-station .station-dot {
+        width: 24px;
+        height: 24px;
+    }
+
+    .station-name {
+        font-size: 0.85rem;
+        text-align: center;
+        max-width: 100px;
+        word-wrap: break-word;
+    }
+
+    .route-line {
+        height: 3px;
+        background-color: #dee2e6;
+        flex-grow: 1;
+        min-width: 50px;
+        margin: 0 5px;
+        position: relative;
+        top: -10px;
+    }
+</style>
+
+@section Scripts {
+    <!-- Добавляем Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <script>
+        // Простой скрипт для поиска по таблице
+        document.getElementById('searchRequests')?.addEventListener('keyup', function() {
+            const searchText = this.value.toLowerCase();
+            const tableRows = document.querySelectorAll('tbody tr');
+
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+    </script>
+}

@@ -60,7 +60,14 @@ namespace Dipp.Pages.Account
             {
                 return RedirectToPage("/Admin/Index");
             }
-
+            if (user.Role?.RoleName == "Логист")
+            {
+                return RedirectToPage("/LogistRoutes");
+            }
+            if (user.Role?.RoleName == "Менеджер")
+            {
+                return RedirectToPage("/Manager");
+            }
             return RedirectToPage("/Index");
         }
 

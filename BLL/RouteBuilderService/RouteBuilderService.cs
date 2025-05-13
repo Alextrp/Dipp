@@ -102,7 +102,7 @@ namespace BLL.RouteBuilderService
         }
 
         // Построение направленного графа
-        private Dictionary<int, List<int>> BuildGraph(IEnumerable<Segment> segments)
+        public Dictionary<int, List<int>> BuildGraph(IEnumerable<Segment> segments)
         {
             var graph = new Dictionary<int, List<int>>();
 

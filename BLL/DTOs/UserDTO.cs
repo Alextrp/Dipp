@@ -14,5 +14,7 @@ namespace BLL.DTOs
         public string Email { get; set; } = null!;
         public string Phone { get; set; } = null!;
         public string Role { get; set; } = null!;
+
+        public string PlainPassword { get; set; }
     }
 }

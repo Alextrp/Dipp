@@ -14,5 +14,7 @@ namespace BLL.DTOs
         public DateTime RequestDate { get; set; }
         public decimal? Cost { get; set; }
         public string? PaymentStatus { get; set; }
+
+        public string RequestStatus { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace BLL.RouteBuilderService
         Task<double> CalculateCostAsync(int fromStationId, int toStationId, int cargoTypeId, double weightKg);
         Task<Route> SaveRouteAsync(string routeName, int startStationId, int endStationId, List<Segment> pathSegments, double totalDistance);
         Task AddCargoAsync(CargoDTO dto, int cargoTypeId);
-
+        public Dictionary<int, List<int>> BuildGraph(IEnumerable<Segment> segments);
 
     }
 }

@@ -10,5 +10,6 @@ namespace DAL.Repository
     public interface IRequestRepository: IRepository<Request>
     {
         Task<List<Request>> GetRequestsWithDetailsByUserIdAsync(int userId);
+        Task<List<Request>> GetAllActiveRequests();
     }
 }

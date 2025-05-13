@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Request = DAL.Models.Request;
 
@@ -23,7 +24,9 @@ namespace DAL.Repository
 
         public async Task<IEnumerable<Request>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet
+                .Include(r => r.Cargo)
+                .Include(r => r.Route).ToListAsync();
         }
 
         public async Task<Request?> GetByIdAsync(int id)
@@ -55,6 +58,26 @@ namespace DAL.Repository
                 .OrderByDescending(r => r.RequestDate)
                 .ToListAsync();
         }
+
+        public async Task<List<Request>> GetAllActiveRequests()
+        {
+            // Создаем экземпляр CancellationTokenSource
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            // Устанавливаем время тайм-аута
+            cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
+
+            // Используем токен отмены при выполнении запроса
+            return await _context.Requests
+                                    .Include(r => r.Route)
+                                        .ThenInclude(r => r.StartStation)
+                                    .Include(r => r.Route)
+                                        .ThenInclude(r => r.EndStation)
+                                    .Include(r => r.Cargo)
+                                 .Where(r => r.Status != "Выполнен" && r.Status != "Выполняется")
+                                 .ToListAsync(cancellationTokenSource.Token);
+        }
+
 
 
         public async Task SaveAsync()
