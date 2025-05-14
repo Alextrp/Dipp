@@ -10,37 +10,37 @@ namespace Dipp.Pages
     public class ManagerModel : PageModel
     {
         private readonly IManagerService _managerService;
-        private readonly IUnitOfWork _unitOfWork;
-        public ManagerModel(IManagerService managerService, IUnitOfWork unitOfWork)
+
+        public ManagerModel(IManagerService managerService)
         {
             _managerService = managerService;
-            _unitOfWork = unitOfWork;
         }
-
-        public List<Request> Requests { get; set; } = new();
 
         [BindProperty]
         public List<int> SelectedIds { get; set; } = new();
 
+        public List<Request> Requests { get; set; } = new();
+
         public async Task OnGetAsync()
         {
-            var request = await _unitOfWork.Requests.GetAllAsync();
-            Requests = request.Where(r => r.Status == "Ждет добавления в расписание").ToList();
+            Requests = await _managerService.GetPendingRequestsAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (SelectedIds.Any())
-                await _managerService.AddOrdersToScheduleAsync(SelectedIds);
+            if (SelectedIds == null || !SelectedIds.Any())
+                return RedirectToPage();
+
+            await _managerService.AddToScheduleAsync(SelectedIds);
             return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostConfirmAsync(int id)
         {
-            await _managerService.ConfirmOrderAsync(id);
+            await _managerService.ConfirmRequestAsync(id);
             return RedirectToPage();
         }
-    }
 
+    }
 }
 

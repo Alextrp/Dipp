@@ -13,6 +13,8 @@ public partial class RailwayDbContext : DbContext
 
     public virtual DbSet<Cargo> Cargos { get; set; }
 
+    public virtual DbSet<ScheduleEntry> ScheduleEntries { get; set; }
+
     public virtual DbSet<CargoType> CargoTypes { get; set; }
 
     public virtual DbSet<DowntimeCost> DowntimeCosts { get; set; }
@@ -179,6 +181,22 @@ public partial class RailwayDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Users__RoleID__398D8EEE");
         });
+
+        modelBuilder.Entity<ScheduleEntry>(entity =>
+        {
+            entity.HasKey(e => e.ScheduleEntryId);
+
+            entity.HasOne(e => e.Request)
+                .WithMany()
+                .HasForeignKey(e => e.RequestId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Station)
+                .WithMany()
+                .HasForeignKey(e => e.StationId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
 
         OnModelCreatingPartial(modelBuilder);
     }

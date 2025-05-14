@@ -13,16 +13,17 @@ namespace DAL.UoW
         IUserRepository Users { get; }
         IRoleRepository Roles { get; }
         ISegmentRepository Segments { get; }
+        IScheduleEntryRepository ScheduleEntries { get; }
         IRepository<Station> Stations { get; }
         IRepository<Cargo> Cargoes { get; }
         IRepository<CargoType> CargoTypes { get; }
         IRequestRepository Requests { get; }
         IRepository<Route> Routes { get; }
-        IRepository<RouteSegment> RouteSegments { get; }
+        IRouteSegmentRepository RouteSegments { get; }
         IRepository<Payment> Payments { get; }
         IRepository<PaymentMethod> PaymentMethods { get; }
         IRepository<MovementStatus> MovementStatuses { get; }
-        IRepository<DowntimeCost> DowntimeCosts { get; }
+        IDowntimeCostRepository DowntimeCosts { get; }
 
         Task<int> SaveAsync();
     }

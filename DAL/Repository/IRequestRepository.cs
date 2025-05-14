@@ -11,5 +11,9 @@ namespace DAL.Repository
     {
         Task<List<Request>> GetRequestsWithDetailsByUserIdAsync(int userId);
         Task<List<Request>> GetAllActiveRequests();
+        void UpdateRange(IEnumerable<Request> entities);
+        Task UpdateAsync(Request entity);
+
+
     }
 }

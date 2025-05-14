@@ -78,6 +78,17 @@ namespace DAL.Repository
                                  .ToListAsync(cancellationTokenSource.Token);
         }
 
+        public void UpdateRange(IEnumerable<Request> entities)
+        {
+            _dbSet.UpdateRange(entities);
+        }
+
+        public Task UpdateAsync(Request entity)
+        {
+            _context.Requests.Update(entity);
+            return Task.CompletedTask;
+        }
+
 
 
         public async Task SaveAsync()

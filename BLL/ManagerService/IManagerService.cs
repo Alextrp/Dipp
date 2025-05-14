@@ -1,4 +1,5 @@
 ﻿using BLL.DTOs;
+using DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,10 @@ namespace BLL.ManagerService
 {
     public interface IManagerService
     {
-        Task<List<RequestDTO>> GetPendingOrdersAsync();
-        Task AddOrdersToScheduleAsync(List<int> orderIds);
-        Task ConfirmOrderAsync(int orderId);
+        Task<List<Request>> GetPendingRequestsAsync();
+        Task<bool> ConfirmRequestAsync(int requestId);
+        Task<bool> ConfirmMultipleRequestsAsync(List<int> requestIds);
+        Task<bool> AddToScheduleAsync(List<int> requestIds);
     }
 
 }

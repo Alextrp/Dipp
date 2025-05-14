@@ -1,4 +1,6 @@
-﻿using BLL.DTOs;
+﻿using AutoMapper;
+using BLL.DTOs;
+using DAL.Models;
 using DAL.UoW;
 using System;
 using System.Collections.Generic;
@@ -11,58 +13,122 @@ namespace BLL.ManagerService
     public class ManagerService : IManagerService
     {
         private readonly IUnitOfWork _uow;
-        //private readonly IStationService _stationService;
+        private readonly IMapper _mapper;
 
-        public ManagerService(IUnitOfWork uow)
+        public ManagerService(IUnitOfWork uow, IMapper mapper)
         {
             _uow = uow;
-            
+            _mapper = mapper;
         }
 
-        public async Task<List<RequestDTO>> GetPendingOrdersAsync()
+        public async Task<List<Request>> GetPendingRequestsAsync()
         {
-            var allorders = await _uow.Requests.GetAllAsync();
-            var orders = allorders.Where(r => r.Status == "Ждет добавления в расписание").ToList();
-            return orders.Select(o => new RequestDTO
+            var allRequests = await _uow.Requests.GetAllAsync();
+            var requests = allRequests.Where(r => r.Status == "Ждет добавления в расписание").ToList();
+            return requests;
+        }
+
+        public async Task<bool> ConfirmRequestAsync(int requestId)
+        {
+            var request = await _uow.Requests.GetByIdAsync(requestId);
+            if (request == null) return false;
+
+            request.Status = "Подтверждено";
+            _uow.Requests.Update(request);
+            await _uow.SaveAsync();
+            return true;
+        }
+
+        public async Task<bool> ConfirmMultipleRequestsAsync(List<int> requestIds)
+        {
+            var requests = (await _uow.Requests.GetAllAsync()).Where(r => requestIds.Contains(r.RequestId));
+            foreach (var req in requests)
             {
-                RequestId = o.RequestId,                
-                RequestStatus = o.Status
-            }).ToList();
+                req.Status = "Подтверждено";
+            }
+
+            _uow.Requests.UpdateRange(requests);
+            await _uow.SaveAsync();
+            return true;
         }
 
-        public async Task AddOrdersToScheduleAsync(List<int> orderIds)
+        public async Task<bool> AddToScheduleAsync(List<int> requestIds)
         {
-            //foreach (var orderId in orderIds)
-            //{
-            //    var order = await _uow.Requests.GetByIdAsync(orderId);
-            //    if (order == null) continue;
+            var stationDowntimeMap = new Dictionary<int, TimeSpan>();
+            var rand = new Random();
 
-            //    var distance = await _stationService.GetDistanceAsync(order.FromStationId, order.ToStationId);
-            //    var travelTimeHours = distance / 80.0;
-            //    var arrival = DateTime.Now.AddHours(travelTimeHours);
-            //    var unloadComplete = arrival.AddHours(1);
+            foreach (var requestId in requestIds)
+            {
+                var request = await _uow.Requests.GetByIdAsync(requestId);
+                if (request == null) continue;
 
-            //    order.ScheduleDeparture = DateTime.Now;
-            //    order.ScheduleArrival = arrival;
-            //    order.UnloadComplete = unloadComplete;
-            //    order.Status = "Запланировано";
+                var cargo = await _uow.Cargoes.GetByIdAsync(request.CargoId);
+                if (cargo == null) continue;
 
-            //    await _uow.Orders.UpdateAsync(order);
-            //}
+                var cargoTypeId = cargo.CargoTypeId;
+                decimal downtimeTotalCost = 0;
 
-            //await _uow.SaveAsync();
+                var segments = await _uow.RouteSegments.GetSegmentsByRouteIdAsync(request.RouteId);
+                var sortedSegments = segments.OrderBy((RouteSegment s) => s.OrderNumber).ToList();
+
+                DateTime arrival = DateTime.Now;
+
+                foreach (var segment in sortedSegments)
+                {
+                    decimal distance = segment.Segment.DistanceKm;
+                    var travelTime = TimeSpan.FromHours((double)distance / 80); // Средняя скорость 80 км/ч
+                    arrival += travelTime;
+
+                    var stationId = segment.Segment.StationToId;
+                    TimeSpan downtime;
+
+                    if (segment == sortedSegments.Last())
+                    {
+                        downtime = TimeSpan.FromHours(1); // Конечная станция — всегда 1 час
+                    }
+                    else
+                    {
+                        if (!stationDowntimeMap.TryGetValue(stationId, out downtime))
+                        {
+                            int randomMinutes = rand.Next(15, 600); // от 15 минут до 10 часов
+                            downtime = TimeSpan.FromMinutes(randomMinutes);
+                            stationDowntimeMap[stationId] = downtime;
+                        }
+                    }
+
+                    // Найти стоимость простоя на этой станции для типа груза
+                    var downtimeCost = await _uow.DowntimeCosts.GetByStationAndCargoTypeAsync(stationId, cargoTypeId);
+                    if (downtimeCost != null)
+                    {
+                        downtimeTotalCost += downtimeCost.CostPerHour * (decimal)downtime.TotalHours;
+                    }
+
+                    var entry = new ScheduleEntry
+                    {
+                        RequestId = requestId,
+                        StationId = stationId,
+                        ArrivalTime = arrival,
+                        Downtime = downtime
+                    };
+
+                    await _uow.ScheduleEntries.AddAsync(entry);
+                    arrival += downtime;
+                }
+
+                // Обновляем статус и стоимость
+                request.Status = "В расписании";
+                request.Cost += Math.Round(downtimeTotalCost, 2);
+
+                await _uow.Requests.UpdateAsync(request);
+
+            }
+
+            await _uow.SaveAsync();
+            return true;
         }
 
-        public async Task ConfirmOrderAsync(int orderId)
-        {
-            //var order = await _uow.Orders.GetByIdAsync(orderId);
-            //if (order != null)
-            //{
-            //    order.Status = "Подтвержден";
-            //    await _uow.Orders.UpdateAsync(order);
-            //    await _uow.SaveAsync();
-            //}
-        }
+
     }
-
 }
+
+
