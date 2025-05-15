@@ -22,7 +22,7 @@ namespace BLL.RouteOptimizerService
         public async Task<OptimizedRouteResult> CalculateOptimalRoute()
         {
             var allRequests = await _unitOfWork.Requests.GetAllActiveRequests();
-            var req = allRequests.Where(a => a.Status != "Ждет добавления в расписание").ToList();
+            var req = allRequests.Where(a => a.Status != "Ждет добавления в расписание" && a.Status != "В расписании").ToList();
             var stations = await _unitOfWork.Stations.GetAllAsync(); 
             var segments = await _unitOfWork.Segments.GetAllWithStationsAsync(); 
             var adjacencyMatrix = _routeBuilderService.BuildGraph(segments); 

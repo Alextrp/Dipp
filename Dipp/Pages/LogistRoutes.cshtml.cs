@@ -23,14 +23,14 @@ namespace Dipp.Pages
         public async Task OnGetAsync()
         {
             var allRequests = await _unitOfWork.Requests.GetAllActiveRequests();
-            AllRequests = allRequests.Where(a => a.Status != "Ждет добавления в расписание").ToList();
+            AllRequests = allRequests.Where(a => a.Status != "Ждет добавления в расписание" && a.Status != "В расписании").ToList();
         }
 
         public async Task<IActionResult> OnPostCalculate()
         {
             OptimizedRoute = await _routeOptimizerService.CalculateOptimalRoute();
             var allRequests = await _unitOfWork.Requests.GetAllActiveRequests();
-            AllRequests = allRequests.Where(a => a.Status != "Ждет добавления в расписание").ToList();
+            AllRequests = allRequests.Where(a => a.Status != "Ждет добавления в расписание" && a.Status != "В расписании").ToList();
             return Page();
         }
 

@@ -60,7 +60,7 @@
                                         <div class="station-icon me-2">
                                             <i class="bi bi-geo-alt text-primary"></i>
                                         </div>
-                                        <span>@req.Route.StartStation</span>
+                                        <span>@req.Route.StartStation.StationName</span>
                                     </div>
                                 </td>
                                 <td>
@@ -68,7 +68,7 @@
                                         <div class="station-icon me-2">
                                             <i class="bi bi-geo-alt-fill text-danger"></i>
                                         </div>
-                                        <span>@req.Route.EndStation</span>
+                                        <span>@req.Route.EndStation.StationName</span>
                                     </div>
                                 </td>
                                 <td>
@@ -125,7 +125,7 @@
         <div class="card-footer bg-white py-3">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="text-muted small">
-                    Всего заявок: <span class="fw-bold">@Model.AllRequests.Where(a => a.Status != "Ждет добавления в расписание").Count()</span>
+                    Всего заявок: <span class="fw-bold">@Model.AllRequests.Where(a => a.Status != "Ждет добавления в расписание" && a.Status != "В расписании").Count()</span>
                 </div>
                 <nav aria-label="Навигация по страницам">
                     <ul class="pagination pagination-sm mb-0">
