@@ -26,7 +26,7 @@ namespace DAL.UoW
             RouteSegments = new RouteSegmentRepository(_context);
             Payments = new Repository<Payment>(_context);
             PaymentMethods = new Repository<PaymentMethod>(_context);
-            MovementStatuses = new Repository<MovementStatus>(_context);
+            MovementStatuses = new MovementStatusRepository(_context);
             DowntimeCosts = new DowntimeCostRepository(_context);
             ScheduleEntries = new ScheduleEntryRepository(_context);
         }
@@ -43,7 +43,7 @@ namespace DAL.UoW
         public IRouteSegmentRepository RouteSegments { get; }
         public IRepository<Payment> Payments { get; }
         public IRepository<PaymentMethod> PaymentMethods { get; }
-        public IRepository<MovementStatus> MovementStatuses { get; }
+        public IMovementStatusRepository MovementStatuses { get; }
         public IDowntimeCostRepository DowntimeCosts { get; }
 
         public async Task<int> SaveAsync()

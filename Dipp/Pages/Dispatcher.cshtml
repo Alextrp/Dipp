@@ -1,0 +1,274 @@
+﻿@page
+@model Dipp.Pages.DispatcherModel
+
+@{
+    ViewData["Title"] = "Диспетчер";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<div class="container-fluid py-4">
+    <!-- Заголовок и панель инструментов -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body bg-primary bg-gradient text-white p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1"><i class="bi bi-truck me-2"></i>Диспетчерская панель</h2>
+                    <p class="mb-0 opacity-75">Мониторинг текущего статуса перемещения грузов</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-light" data-bs-toggle="tooltip" title="Обновить данные">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="exportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-download me-1"></i> Экспорт
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="exportDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-excel me-2"></i>Excel</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-pdf me-2"></i>PDF</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-printer me-2"></i>Печать</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Карточки статистики -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-3 me-3">
+                            <i class="bi bi-box-seam text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Всего грузов</div>
+                            <div class="fs-3 fw-bold">@Model.Statuses.Count()</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded-3 me-3">
+                            <i class="bi bi-check-circle text-success fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">В пути</div>
+                            <div class="fs-3 fw-bold">@Model.Statuses.Count(s => s.SattusDescription.Contains("пути"))</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded-3 me-3">
+                            <i class="bi bi-hourglass-split text-warning fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Ожидают</div>
+                            <div class="fs-3 fw-bold">@Model.Statuses.Count(s => s.SattusDescription.Contains("ожидани"))</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3 mb-md-0">
+            <div class="card h-100 shadow-sm border-0 rounded-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-danger bg-opacity-10 p-3 rounded-3 me-3">
+                            <i class="bi bi-exclamation-triangle text-danger fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-muted small">Требуют внимания</div>
+                            <div class="fs-3 fw-bold">@Model.Statuses.Count(s => s.SattusDescription.Contains("проблем"))</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Фильтры и поиск -->
+    <div class="card shadow-sm border-0 rounded-3 mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control border-0 bg-light" placeholder="Поиск по номеру заявки или станции...">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-light border-0">
+                        <option selected>Все станции</option>
+                        @foreach (var station in Model.Statuses.Select(s => s.CurrentStation?.StationName).Distinct())
+                        {
+                            <option>@station</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select bg-light border-0">
+                        <option selected>Все статусы</option>
+                        <option>В пути</option>
+                        <option>Ожидание</option>
+                        <option>Погрузка</option>
+                        <option>Разгрузка</option>
+                        <option>Проблема</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary w-100">
+                        <i class="bi bi-funnel me-1"></i> Применить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Таблица статусов -->
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="border-0 ps-4">
+                                <div class="d-flex align-items-center">
+                                    <span>Номер заявки</span>
+                                    <i class="bi bi-arrow-down-up ms-1 text-muted"></i>
+                                </div>
+                            </th>
+                            <th class="border-0">
+                                <div class="d-flex align-items-center">
+                                    <span>Текущая станция</span>
+                                    <i class="bi bi-arrow-down-up ms-1 text-muted"></i>
+                                </div>
+                            </th>
+                            <th class="border-0">Статус</th>
+                            <th class="border-0">
+                                <div class="d-flex align-items-center">
+                                    <span>Дата обновления</span>
+                                    <i class="bi bi-arrow-down-up ms-1 text-muted"></i>
+                                </div>
+                            </th>
+                            <th class="border-0 text-end pe-4">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var status in Model.Statuses)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-medium">#@status.RequestId</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-geo-alt text-primary me-2"></i>
+                                        <span>@status.CurrentStation?.StationName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    @{
+                                        string badgeClass = "bg-secondary";
+                                        string icon = "bi-info-circle";
+
+                                        if (status.SattusDescription.Contains("пути"))
+                                        {
+                                            badgeClass = "bg-success";
+                                            icon = "bi-truck";
+                                        }
+                                        else if (status.SattusDescription.Contains("ожидани"))
+                                        {
+                                            badgeClass = "bg-warning text-dark";
+                                            icon = "bi-hourglass-split";
+                                        }
+                                        else if (status.SattusDescription.Contains("погрузк"))
+                                        {
+                                            badgeClass = "bg-info text-dark";
+                                            icon = "bi-box-arrow-in-down";
+                                        }
+                                        else if (status.SattusDescription.Contains("разгрузк"))
+                                        {
+                                            badgeClass = "bg-info text-dark";
+                                            icon = "bi-box-arrow-up";
+                                        }
+                                        else if (status.SattusDescription.Contains("проблем"))
+                                        {
+                                            badgeClass = "bg-danger";
+                                            icon = "bi-exclamation-triangle";
+                                        }
+                                    }
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge @badgeClass px-3 py-2">
+                                            <i class="bi @icon me-1"></i>
+                                            @status.SattusDescription
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-clock text-muted me-2"></i>
+                                        <span>@status.StatusDate.ToString("g")</span>
+                                    </div>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Подробности">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="tooltip" title="Обновить статус">
+                                            <i class="bi bi-arrow-repeat"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="История">
+                                            <i class="bi bi-clock-history"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer bg-white border-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="text-muted small">
+                    Показано <span class="fw-medium">@Model.Statuses.Count()</span> из <span class="fw-medium">@Model.Statuses.Count()</span> записей
+                </div>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Предыдущая</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Следующая</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Инициализация тултипов Bootstrap
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}

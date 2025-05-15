@@ -1,6 +1,8 @@
 using BLL;
 using BLL.AccountService;
 using BLL.AdminService;
+using BLL.DispatcherService;
+using BLL.LogistStatisticsService;
 using BLL.ManagerService;
 using BLL.RequestService;
 using BLL.RouteBuilderService;
@@ -28,6 +30,8 @@ builder.Services.AddScoped<ISegmentRepository, SegmentRepository>();
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IRouteSegmentRepository, RouteSegmentRepository>();
 builder.Services.AddScoped<IDowntimeCostRepository, DowntimeCostRepository>();
+builder.Services.AddScoped<ILogistStatisticsService, LogistStatisticsService>();
+builder.Services.AddScoped<IDispatcherService, DispatcherService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAccountService, AccountService>();

@@ -22,7 +22,7 @@ namespace DAL.UoW
         IRouteSegmentRepository RouteSegments { get; }
         IRepository<Payment> Payments { get; }
         IRepository<PaymentMethod> PaymentMethods { get; }
-        IRepository<MovementStatus> MovementStatuses { get; }
+        IMovementStatusRepository MovementStatuses { get; }
         IDowntimeCostRepository DowntimeCosts { get; }
 
         Task<int> SaveAsync();

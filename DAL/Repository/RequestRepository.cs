@@ -26,7 +26,10 @@ namespace DAL.Repository
         {
             return await _dbSet
                 .Include(r => r.Cargo)
-                .Include(r => r.Route).ToListAsync();
+                    .ThenInclude(c => c.CargoType)
+                .Include(r => r.Route)
+                .ToListAsync();
+
         }
 
         public async Task<Request?> GetByIdAsync(int id)

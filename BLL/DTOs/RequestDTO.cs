@@ -16,5 +16,6 @@ namespace BLL.DTOs
         public string? PaymentStatus { get; set; }
 
         public string RequestStatus { get; set; }
+        public string? CurrentStationName { get; set; }
     }
 }

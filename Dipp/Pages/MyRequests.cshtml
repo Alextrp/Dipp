@@ -111,6 +111,7 @@
                                 <th scope="col">Дата</th>
                                 <th scope="col">Стоимость</th>
                                 <th scope="col">Статус</th>
+                                <th scope="col">Текущая станция</th>
                                 <th scope="col" class="text-end pe-4">Действия</th>
                             </tr>
                         </thead>
@@ -177,6 +178,13 @@
                                             @(request.PaymentStatus ?? "—")
                                         </span>
                                     </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <i class="bi bi-train-front text-info me-2"></i>
+                                            <span>@request.CurrentStationName</span>
+                                        </div>
+                                    </td>
+
                                     <td class="text-end pe-4">
                                         <div class="btn-group">
                                             <a href="/request-details/@request.RequestId" class="btn btn-sm btn-outline-primary">
@@ -196,6 +204,7 @@
                                             }
                                         </div>
                                     </td>
+
                                 </tr>
                             }
                         </tbody>

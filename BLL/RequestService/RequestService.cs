@@ -25,16 +25,26 @@ namespace BLL.RequestService
 
             var requests = await _uow.Requests
                 .GetRequestsWithDetailsByUserIdAsync(user.UserId);
+            var statuses = await _uow.MovementStatuses.GetAllAsync();
 
-            return requests.Select(r => new RequestDTO
+            return requests.Select(r =>
             {
-                RequestId = r.RequestId,
-                CargoName = r.Cargo.CargoName,
-                RouteName = r.Route.RouteName,
-                RequestDate = r.RequestDate,
-                Cost = r.Cost,
-                PaymentStatus = r.Status
+                var currentStatus = statuses
+                    .Where(ms => ms.RequestId == r.RequestId)
+                    .FirstOrDefault();
+
+                return new RequestDTO
+                {
+                    RequestId = r.RequestId,
+                    CargoName = r.Cargo.CargoName,
+                    RouteName = r.Route.RouteName,
+                    RequestDate = r.RequestDate,
+                    Cost = r.Cost,
+                    PaymentStatus = r.Status,
+                    CurrentStationName = currentStatus?.SattusDescription ?? "—"
+                };
             }).ToList();
+   
         }
     }
 

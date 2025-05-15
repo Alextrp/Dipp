@@ -21,7 +21,8 @@ namespace DAL.Repository
 
         public async Task<IEnumerable<ScheduleEntry>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.Include(s => s.Station)
+                .ToListAsync();
         }
 
         public async Task<ScheduleEntry?> GetByIdAsync(int id)

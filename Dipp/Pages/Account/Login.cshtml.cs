@@ -68,6 +68,10 @@ namespace Dipp.Pages.Account
             {
                 return RedirectToPage("/Manager");
             }
+            if (user.Role?.RoleName == "Диспетчер")
+            {
+                return RedirectToPage("/Dispatcher");
+            }
             return RedirectToPage("/Index");
         }
 

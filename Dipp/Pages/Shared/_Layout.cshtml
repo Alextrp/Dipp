@@ -37,8 +37,10 @@
                             }
                             if (User.IsInRole("Логист"))
                             {
+                                <a class="nav-link" href="/LogistStatistics">Статистика</a>
                                 <a class="nav-link" href="/LogistRoutes">Логистика</a>
                             }
+
                             <p class="btn align-items-center text-dark mb-0 me-3 text-primary">@User.Identity.Name</p>
                             <form asp-page="/Account/Logout" method="post" class="d-inline">
                                 <button type="submit" class="btn btn-link">Выйти</button>
